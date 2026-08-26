@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <title>吊燈｜F4-K 產品型錄</title>
+  <style>
+    :root { color-scheme: dark; --bar-h: 74px; --table: #2a2721; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--table); }
+    body { font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif; }
+    .catalog { height: 100dvh; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+    .stage { position: relative; min-height: 0; display: grid; place-items: center; overflow: hidden; padding: clamp(18px, 4vmin, 48px) clamp(16px, 5vw, 72px) clamp(30px, 6vmin, 68px); background: var(--table); perspective: 1400px; }
+    .page { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; backface-visibility: hidden; transform-style: preserve-3d; box-shadow: 0 7px 5px rgba(0,0,0,.22), 0 20px 24px rgba(0,0,0,.34), 0 38px 50px rgba(0,0,0,.22); }
+    .loading { position: absolute; inset: 0; display: grid; place-items: center; color: #aaa; font-size: 14px; pointer-events: none; }
+    .page.ready + .loading { display: none; }
+    .controls { min-height: var(--bar-h); padding: 10px max(14px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); display: grid; grid-template-columns: minmax(96px, 1fr) auto minmax(96px, 1fr); align-items: center; gap: 12px; background: #211f1b; border-top: 1px solid rgba(255,255,255,.12); box-shadow: 0 -8px 24px rgba(0,0,0,.12); }
+    button { min-height: 46px; border: 1px solid #555; border-radius: 10px; background: #292929; color: #fff; font: inherit; font-weight: 650; cursor: pointer; touch-action: manipulation; display: grid; place-items: center; }
+    button svg { width: 28px; height: 28px; fill: currentColor; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+    button:hover:not(:disabled) { background: #3a3a3a; }
+    button:focus-visible { outline: 3px solid #78a9ff; outline-offset: 2px; }
+    button:disabled { opacity: .35; cursor: default; }
+    #prev { justify-self: stretch; }
+    #next { justify-self: stretch; background: #f2f2f2; color: #111; border-color: #f2f2f2; }
+    #next:hover:not(:disabled) { background: #fff; }
+    .status { min-width: 112px; text-align: center; line-height: 1.25; }
+    .title { display: block; max-width: 38vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ddd; font-size: 13px; }
+    .counter { display: block; margin-top: 3px; color: #fff; font-variant-numeric: tabular-nums; font-size: 15px; }
+    @media (max-width: 520px) {
+      :root { --bar-h: 66px; }
+      .stage { padding: 14px 12px 28px; }
+      .controls { grid-template-columns: 1fr auto 1fr; gap: 8px; padding-top: 8px; }
+      button { min-height: 44px; font-size: 14px; }
+      .title { display: none; }
+      .status { min-width: 72px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .page { transition: opacity .12s ease; }
+      .page.loading-page { opacity: .35; }
+      .page.flip-out-next { transform-origin: left center; animation: flip-out-next .22s ease-in both; }
+      .page.flip-in-next { transform-origin: right center; animation: flip-in-next .28s cubic-bezier(.2,.75,.25,1) both; }
+      .page.flip-out-prev { transform-origin: right center; animation: flip-out-prev .22s ease-in both; }
+      .page.flip-in-prev { transform-origin: left center; animation: flip-in-prev .28s cubic-bezier(.2,.75,.25,1) both; }
+      @keyframes flip-out-next { to { transform: translateX(-7%) rotateY(-34deg) scale(.97); opacity: 0; filter: brightness(.55); } }
+      @keyframes flip-in-next { from { transform: translateX(7%) rotateY(34deg) scale(.97); opacity: 0; filter: brightness(.55); } to { transform: none; opacity: 1; filter: none; } }
+      @keyframes flip-out-prev { to { transform: translateX(7%) rotateY(34deg) scale(.97); opacity: 0; filter: brightness(.55); } }
+      @keyframes flip-in-prev { from { transform: translateX(-7%) rotateY(-34deg) scale(.97); opacity: 0; filter: brightness(.55); } to { transform: none; opacity: 1; filter: none; } }
+    }
+  </style>
+</head>
+<body>
+  <main class="catalog" aria-label="吊燈產品型錄">
+    <section class="stage" id="stage">
+      <img class="page" id="page" alt="" draggable="false">
+      <div class="loading" aria-live="polite">載入中…</div>
+    </section>
+    <nav class="controls" aria-label="型錄翻頁">
+      <button id="prev" type="button" aria-label="上一頁" title="上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.7 4.3a1 1 0 0 1 0 1.4L9.4 12l6.3 6.3a1 1 0 1 1-1.4 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.4 0Z"/></svg></button>
+      <div class="status" aria-live="polite">
+        <span class="title">吊燈</span>
+        <span class="counter"><span id="current">1</span> / <span id="total">0</span></span>
+      </div>
+      <button id="next" type="button" aria-label="下一頁" title="下一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 19.7a1 1 0 0 1 0-1.4l6.3-6.3-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0Z"/></svg></button>
+    </nav>
+  </main>
+  <script>
+    const pages = ["02-pendant-lighting-cover.png","f4-k-071.jpg","f4-k-072.jpg","f4-k-073.jpg","f4-k-074.jpg","f4-k-075.jpg","f4-k-076.jpg","f4-k-077.jpg","f4-k-078.jpg","f4-k-079.jpg","f4-k-080.jpg","f4-k-081.jpg","f4-k-082.jpg","f4-k-083.jpg","f4-k-084.jpg","f4-k-085.jpg","f4-k-086.jpg","f4-k-087.jpg","f4-k-088.jpg","f4-k-089.jpg","f4-k-090.jpg","f4-k-091.jpg","f4-k-092.jpg","f4-k-093.jpg","f4-k-094.jpg","f4-k-095.jpg","f4-k-096.jpg","f4-k-097.jpg","f4-k-098.jpg","f4-k-099.jpg","f4-k-100.jpg","f4-k-101.jpg","f4-k-102.jpg","f4-k-103.jpg","f4-k-104.jpg","f4-k-105.jpg","f4-k-106.jpg","f4-k-107.jpg","f4-k-108.jpg","f4-k-109.jpg","f4-k-110.jpg","f4-k-111.jpg","f4-k-112.jpg","f4-k-113.jpg","f4-k-114.jpg","f4-k-115.jpg","f4-k-143.jpg","f4-k-144.jpg","f4-k-145.jpg","f4-k-146.jpg","f4-k-147.jpg","f4-k-148.jpg","f4-k-149.jpg","f4-k-150.jpg","f4-k-151.jpg","f4-k-152.jpg","f4-k-153.jpg","f4-k-154.jpg","f4-k-155.jpg","f4-k-156.jpg","f4-k-157.jpg","f4-k-158.jpg","f4-k-159.jpg","f4-k-160.jpg","f4-k-161.jpg","f4-k-162.jpg","f4-k-163.jpg","f4-k-164.jpg","f4-k-165.jpg","f4-k-166.jpg","f4-k-167.jpg","f4-k-168.jpg","f4-k-169.jpg","f4-k-170.jpg","f4-k-171.jpg","f4-k-172.jpg","f4-k-173.jpg","f4-k-174.jpg","f4-k-175.jpg","f4-k-176.jpg","f4-k-177.jpg","f4-k-178.jpg","f4-k-179.jpg","f4-k-180.jpg","f4-k-181.jpg","f4-k-182.jpg","f4-k-183.jpg","f4-k-184.jpg","f4-k-185.jpg","f4-k-186.jpg","f4-k-187.jpg","f4-k-188.jpg","f4-k-189.jpg","f4-k-190.jpg","f4-k-191.jpg","f4-k-192.jpg","f4-k-193.jpg","f4-k-194.jpg","f4-k-195.jpg","f4-k-196.jpg","f4-k-197.jpg","f4-k-198.jpg","f4-k-199.jpg","f4-k-200.jpg","f4-k-201.jpg","f4-k-202.jpg","f4-k-203.jpg","f4-k-204.jpg","f4-k-205.jpg","f4-k-206.jpg","f4-k-207.jpg","f4-k-208.jpg","f4-k-209.jpg","f4-k-211.jpg","f4-k-212.jpg","f4-k-213.jpg","f4-k-214.jpg","f4-k-215.jpg","f4-k-216.jpg","f4-k-217.jpg","f4-k-218.jpg","f4-k-219.jpg","f4-k-220.jpg","f4-k-281.jpg","f4-k-282.jpg","f4-k-283.jpg","f4-k-284.jpg","f4-k-285.jpg","f4-k-286.jpg","f4-k-287.jpg","f4-k-288.jpg","f4-k-289.jpg","f4-k-290.jpg","f4-k-291.jpg","f4-k-292.jpg","f4-k-293.jpg","f4-k-294.jpg","f4-k-295.jpg","f4-k-296.jpg","f4-k-297.jpg","f4-k-298.jpg","f4-k-299.jpg","f4-k-300.jpg","f4-k-301.jpg","f4-k-302.jpg","f4-k-303.jpg","f4-k-304.jpg","f4-k-305.jpg","f4-k-306.jpg","f4-k-307.jpg","f4-k-308.jpg","f4-k-309.jpg","f4-k-310.jpg","f4-k-311.jpg","f4-k-312.jpg","f4-k-313.jpg","f4-k-314.jpg","f4-k-315.jpg","f4-k-316.jpg","f4-k-317.jpg","f4-k-318.jpg","f4-k-319.jpg","f4-k-320.jpg","f4-k-321.jpg","f4-k-322.jpg","f4-k-323.jpg","f4-k-324.jpg","f4-k-325.jpg","f4-k-326.jpg","f4-k-327.jpg","f4-k-328.jpg","f4-k-329.jpg","f4-k-330.jpg","f4-k-331.jpg","f4-k-332.jpg","f4-k-333.jpg","f4-k-334.jpg","f4-k-335.jpg","f4-k-336.jpg","f4-k-337.jpg","f4-k-338.jpg","f4-k-339.jpg","f4-k-340.jpg","f4-k-341.jpg","f4-k-342.jpg","f4-k-343.jpg","f4-k-344.jpg","f4-k-345.jpg"];
+    const image = document.getElementById('page');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const current = document.getElementById('current');
+    const total = document.getElementById('total');
+    const stage = document.getElementById('stage');
+    let index = Math.min(Math.max(Number(location.hash.slice(1)) - 1 || 0, 0), pages.length - 1);
+    let touchStartX = 0;
+    let animating = false;
+
+    total.textContent = pages.length;
+
+    function preload(i) {
+      if (pages[i]) { const img = new Image(); img.src = pages[i]; }
+    }
+
+    function show(i, updateHash = true) {
+      if (!pages.length) return;
+      index = Math.min(Math.max(i, 0), pages.length - 1);
+      image.classList.remove('ready');
+      image.classList.add('loading-page');
+      image.alt = `吊燈型錄第 ${index + 1} 頁`;
+      image.onload = () => {
+        image.classList.add('ready');
+        image.classList.remove('loading-page');
+        preload(index - 1); preload(index + 1);
+      };
+      image.src = pages[index];
+      current.textContent = index + 1;
+      prev.disabled = index === 0;
+      next.disabled = index === pages.length - 1;
+      if (updateHash) history.replaceState(null, '', `#${index + 1}`);
+    }
+
+    function turn(target) {
+      if (animating || target < 0 || target >= pages.length || target === index) return;
+      const direction = target > index ? 'next' : 'prev';
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(target); return; }
+      animating = true;
+      image.classList.add(`flip-out-${direction}`);
+      setTimeout(() => {
+        image.classList.remove(`flip-out-${direction}`);
+        show(target);
+        image.classList.add(`flip-in-${direction}`);
+        image.addEventListener('animationend', () => {
+          image.classList.remove(`flip-in-${direction}`);
+          animating = false;
+        }, { once: true });
+      }, 220);
+    }
+
+    prev.addEventListener('click', () => turn(index - 1));
+    next.addEventListener('click', () => turn(index + 1));
+    addEventListener('keydown', e => {
+      if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); turn(index - 1); }
+      if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); turn(index + 1); }
+      if (e.key === 'Home') { e.preventDefault(); turn(0); }
+      if (e.key === 'End') { e.preventDefault(); turn(pages.length - 1); }
+    });
+    addEventListener('hashchange', () => show(Number(location.hash.slice(1)) - 1 || 0, false));
+    stage.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) turn(index + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+    show(index);
+  </script>
+</body>
+</html>
