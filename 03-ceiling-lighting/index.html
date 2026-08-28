@@ -27,13 +27,9 @@
     .status { min-width: 112px; text-align: center; line-height: 1.25; }
     .title { display: block; width: fit-content; max-width: 38vw; margin-inline: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ddd; font-size: 13px; }
     .counter { display: block; margin-top: 3px; color: #fff; font-variant-numeric: tabular-nums; font-size: 15px; }
-    .line-float { position: fixed; left: clamp(10px, 2vw, 24px); bottom: calc(var(--bar-h) + 12px); z-index: 20; display: block; width: clamp(190px, 24vw, 310px); aspect-ratio: 902 / 400; overflow: hidden; filter: drop-shadow(0 8px 14px rgba(0,0,0,.24)); transition: transform .18s ease, filter .18s ease; }
-    .line-float:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 10px 18px rgba(0,0,0,.3)); }
-    .line-float:focus-visible { outline: 3px solid #78a9ff; outline-offset: 4px; border-radius: 18px; }
-    .line-float img { position: absolute; width: 107.54%; max-width: none; height: auto; left: -3.77%; top: -27.25%; }    @media (max-width: 520px) {
+    @media (max-width: 520px) {
       :root { --bar-h: 66px; }
       .stage { padding: 14px 12px 28px; }
-      .line-float { width: clamp(160px, 46vw, 220px); bottom: calc(var(--bar-h) + 8px); }
       .controls { grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 8px; padding-top: 8px; }
       button { width: 42px; min-height: 40px; font-size: 14px; }
       .title { display: none; }
@@ -67,9 +63,6 @@
       </div>
       <button id="next" type="button" aria-label="下一頁" title="下一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 19.7a1 1 0 0 1 0-1.4l6.3-6.3-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0Z"/></svg></button>
     </nav>
-    <a class="line-float" href="https://lin.ee/uh5jinV" target="_blank" rel="noopener noreferrer" aria-label="使用 LINE 諮詢燈具與預約服務">
-      <img src="../floating-line-link.png" alt="需要燈具建議嗎？歡迎使用 LINE 諮詢及預約服務">
-    </a>
   </main>
   <script>
     const pages = ["03-ceiling-lighting-cover.png","f4-k-116.jpg","f4-k-117.jpg","f4-k-118.jpg","f4-k-119.jpg","f4-k-120.jpg","f4-k-121.jpg","f4-k-122.jpg","f4-k-123.jpg","f4-k-124.jpg","f4-k-125.jpg","f4-k-126.jpg","f4-k-127.jpg","f4-k-128.jpg","f4-k-129.jpg","f4-k-210.jpg","f4-k-221.jpg","f4-k-222.jpg","f4-k-223.jpg","f4-k-224.jpg","f4-k-225.jpg","f4-k-226.jpg","f4-k-227.jpg","f4-k-228.jpg","f4-k-229.jpg","f4-k-230.jpg","f4-k-231.jpg","f4-k-232.jpg","f4-k-233.jpg","f4-k-234.jpg","f4-k-235.jpg","f4-k-236.jpg","f4-k-237.jpg","f4-k-238.jpg","f4-k-239.jpg","f4-k-240.jpg","f4-k-241.jpg","f4-k-242.jpg","f4-k-243.jpg","f4-k-244.jpg","f4-k-245.jpg","f4-k-246.jpg","f4-k-247.jpg","f4-k-248.jpg","f4-k-249.jpg","f4-k-250.jpg","f4-k-251.jpg","f4-k-252.jpg","f4-k-253.jpg","f4-k-254.jpg","f4-k-255.jpg","f4-k-256.jpg","f4-k-257.jpg","f4-k-258.jpg","f4-k-259.jpg","f4-k-260.jpg","f4-k-261.jpg","f4-k-262.jpg","f4-k-263.jpg","f4-k-264.jpg","f4-k-265.jpg","f4-k-266.jpg","f4-k-267.jpg","f4-k-268.jpg","f4-k-269.jpg","f4-k-270.jpg","f4-k-271.jpg","f4-k-272.jpg","f4-k-273.jpg","f4-k-274.jpg","f4-k-275.jpg","f4-k-276.jpg","f4-k-277.jpg","f4-k-278.jpg","f4-k-279.jpg","f4-k-280.jpg","f4-k-346.jpg","f4-k-347.jpg","f4-k-348.jpg","f4-k-349.jpg","f4-k-350.jpg","f4-k-351.jpg","f4-k-352.jpg","f4-k-353.jpg","f4-k-354.jpg","f4-k-355.jpg","f4-k-356.jpg","f4-k-357.jpg","f4-k-358.jpg","f4-k-359.jpg","f4-k-360.jpg","f4-k-361.jpg","f4-k-362.jpg","f4-k-363.jpg","f4-k-364.jpg","f4-k-365.jpg","f4-k-366.jpg","f4-k-367.jpg","f4-k-368.jpg","f4-k-369.jpg","f4-k-370.jpg","f4-k-371.jpg","f4-k-372.jpg","f4-k-373.jpg","f4-k-374.jpg","f4-k-375.jpg","f4-k-376.jpg","f4-k-377.jpg","f4-k-378.jpg","f4-k-379.jpg","f4-k-380.jpg","f4-k-381.jpg","f4-k-382.jpg","f4-k-383.jpg","f4-k-384.jpg","f4-k-385.jpg","f4-k-386.jpg","f4-k-387.jpg","f4-k-388.jpg","f4-k-389.jpg","f4-k-390.jpg","f4-k-391.jpg","f4-k-392.jpg","f4-k-393.jpg","f4-k-394.jpg","f4-k-395.jpg","f4-k-396.jpg","f4-k-397.jpg","f4-k-398.jpg","f4-k-399.jpg","f4-k-400.jpg","f4-k-401.jpg","f4-k-402.jpg","f4-k-408.jpg","f4-k-409.jpg","f4-k-410.jpg","f4-k-461.jpg","f4-k-462.jpg","f4-k-463.jpg","f4-k-464.jpg","f4-k-465.jpg","f4-k-466.jpg","f4-k-467.jpg","f4-k-468.jpg","f4-k-469.jpg","f4-k-470.jpg","f4-k-471.jpg","f4-k-472.jpg","f4-k-473.jpg","f4-k-474.jpg","f4-k-475.jpg","f4-k-476.jpg","f4-k-477.jpg","f4-k-478.jpg","f4-k-479.jpg","f4-k-480.jpg","f4-k-481.jpg","f4-k-482.jpg"];
