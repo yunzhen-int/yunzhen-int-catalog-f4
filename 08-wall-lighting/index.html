@@ -25,6 +25,10 @@
     #next { justify-self: end; background: #f2f2f2; color: #111; border-color: #f2f2f2; }
     #next:hover:not(:disabled) { background: #fff; }
     .status { min-width: 112px; text-align: center; line-height: 1.25; }
+    .jump-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 0 max(14px, env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); background: transparent; }
+    .jump-controls[hidden] { display: none; }
+    .jump-controls button { width: auto; min-width: 104px; min-height: 32px; padding: 4px 9px; border: 0; border-radius: 8px; background: rgba(255,255,255,.08); color: #ddd; font-size: 13px; font-weight: 550; }
+    .jump-controls button:hover { background: rgba(255,255,255,.15); }
     .title { display: block; width: fit-content; max-width: 38vw; margin-inline: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ddd; font-size: 13px; }
     .counter { display: block; margin-top: 3px; color: #fff; font-variant-numeric: tabular-nums; font-size: 15px; }
     @media (max-width: 520px) {
@@ -63,6 +67,10 @@
       </div>
       <button id="next" type="button" aria-label="下一頁" title="下一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 19.7a1 1 0 0 1 0-1.4l6.3-6.3-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0Z"/></svg></button>
     </nav>
+    <nav class="jump-controls" id="jumpControls" aria-label="快速翻頁" hidden>
+      <button id="jumpPrev" type="button" aria-label="往前10頁">|&lt;&lt;&nbsp; 前10頁</button>
+      <button id="jumpNext" type="button" aria-label="往後10頁">後10頁 &nbsp;&gt;&gt;|</button>
+    </nav>
   </main>
   <script>
     const pages = ["08-wall-lighting-cover.png","f4-k-403.jpg","f4-k-404.jpg","f4-k-405.jpg","f4-k-406.jpg","f4-k-407.jpg","f4-k-411.jpg","f4-k-412.jpg","f4-k-413.jpg","f4-k-414.jpg","f4-k-415.jpg","f4-k-416.jpg","f4-k-417.jpg","f4-k-418.jpg","f4-k-419.jpg","f4-k-420.jpg","f4-k-421.jpg","f4-k-422.jpg","f4-k-423.jpg","f4-k-424.jpg","f4-k-425.jpg","f4-k-426.jpg","f4-k-427.jpg","f4-k-428.jpg","f4-k-429.jpg","f4-k-430.jpg","f4-k-431.jpg","f4-k-432.jpg","f4-k-433.jpg","f4-k-434.jpg","f4-k-435.jpg","f4-k-436.jpg","f4-k-437.jpg","f4-k-438.jpg","f4-k-439.jpg","f4-k-440.jpg","f4-k-441.jpg","f4-k-442.jpg","f4-k-443.jpg","f4-k-444.jpg","f4-k-445.jpg","f4-k-446.jpg","f4-k-447.jpg","f4-k-448.jpg","f4-k-449.jpg","f4-k-450.jpg"];
@@ -72,6 +80,9 @@
     const current = document.getElementById('current');
     const total = document.getElementById('total');
     const stage = document.getElementById('stage');
+    const jumpControls = document.getElementById('jumpControls');
+    const jumpPrev = document.getElementById('jumpPrev');
+    const jumpNext = document.getElementById('jumpNext');
     let index = Math.min(Math.max(Number(location.hash.slice(1)) - 1 || 0, 0), pages.length - 1);
     let touchStartX = 0;
     let animating = false;
@@ -95,14 +106,17 @@
       };
       image.src = pages[index];
       current.textContent = index + 1;
-      prev.disabled = index === 0;
-      next.disabled = index === pages.length - 1;
+      prev.disabled = pages.length < 2;
+      next.disabled = pages.length < 2;
+      jumpControls.hidden = pages.length <= 20;
       if (updateHash) history.replaceState(null, '', `#${index + 1}`);
     }
 
     function turn(target) {
-      if (animating || target < 0 || target >= pages.length || target === index) return;
+      if (animating || pages.length < 2) return;
       const direction = target > index ? 'next' : 'prev';
+      target = ((target % pages.length) + pages.length) % pages.length;
+      if (target === index) return;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(target); return; }
       animating = true;
       image.classList.add(`flip-out-${direction}`);
@@ -119,6 +133,8 @@
 
     prev.addEventListener('click', () => turn(index - 1));
     next.addEventListener('click', () => turn(index + 1));
+    jumpPrev.addEventListener('click', () => turn(index - 10));
+    jumpNext.addEventListener('click', () => turn(index + 10));
     addEventListener('keydown', e => {
       if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); turn(index - 1); }
       if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); turn(index + 1); }

@@ -25,6 +25,10 @@
     #next { justify-self: end; background: #f2f2f2; color: #111; border-color: #f2f2f2; }
     #next:hover:not(:disabled) { background: #fff; }
     .status { min-width: 112px; text-align: center; line-height: 1.25; }
+    .jump-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 0 max(14px, env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); background: transparent; }
+    .jump-controls[hidden] { display: none; }
+    .jump-controls button { width: auto; min-width: 104px; min-height: 32px; padding: 4px 9px; border: 0; border-radius: 8px; background: rgba(255,255,255,.08); color: #ddd; font-size: 13px; font-weight: 550; }
+    .jump-controls button:hover { background: rgba(255,255,255,.15); }
     .title { display: block; width: fit-content; max-width: 38vw; margin-inline: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ddd; font-size: 13px; }
     .counter { display: block; margin-top: 3px; color: #fff; font-variant-numeric: tabular-nums; font-size: 15px; }
     @media (max-width: 520px) {
@@ -63,6 +67,10 @@
       </div>
       <button id="next" type="button" aria-label="下一頁" title="下一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 19.7a1 1 0 0 1 0-1.4l6.3-6.3-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0Z"/></svg></button>
     </nav>
+    <nav class="jump-controls" id="jumpControls" aria-label="快速翻頁" hidden>
+      <button id="jumpPrev" type="button" aria-label="往前10頁">|&lt;&lt;&nbsp; 前10頁</button>
+      <button id="jumpNext" type="button" aria-label="往後10頁">後10頁 &nbsp;&gt;&gt;|</button>
+    </nav>
   </main>
   <script>
     const pages = ["02-pendant-lighting-cover.png","f4-k-071.jpg","f4-k-072.jpg","f4-k-073.jpg","f4-k-074.jpg","f4-k-075.jpg","f4-k-076.jpg","f4-k-077.jpg","f4-k-078.jpg","f4-k-079.jpg","f4-k-080.jpg","f4-k-081.jpg","f4-k-082.jpg","f4-k-083.jpg","f4-k-084.jpg","f4-k-085.jpg","f4-k-086.jpg","f4-k-087.jpg","f4-k-088.jpg","f4-k-089.jpg","f4-k-090.jpg","f4-k-091.jpg","f4-k-092.jpg","f4-k-093.jpg","f4-k-094.jpg","f4-k-095.jpg","f4-k-096.jpg","f4-k-097.jpg","f4-k-098.jpg","f4-k-099.jpg","f4-k-100.jpg","f4-k-101.jpg","f4-k-102.jpg","f4-k-103.jpg","f4-k-104.jpg","f4-k-105.jpg","f4-k-106.jpg","f4-k-107.jpg","f4-k-108.jpg","f4-k-109.jpg","f4-k-110.jpg","f4-k-111.jpg","f4-k-112.jpg","f4-k-113.jpg","f4-k-114.jpg","f4-k-115.jpg","f4-k-143.jpg","f4-k-144.jpg","f4-k-145.jpg","f4-k-146.jpg","f4-k-147.jpg","f4-k-148.jpg","f4-k-149.jpg","f4-k-150.jpg","f4-k-151.jpg","f4-k-152.jpg","f4-k-153.jpg","f4-k-154.jpg","f4-k-155.jpg","f4-k-156.jpg","f4-k-157.jpg","f4-k-158.jpg","f4-k-159.jpg","f4-k-160.jpg","f4-k-161.jpg","f4-k-162.jpg","f4-k-163.jpg","f4-k-164.jpg","f4-k-165.jpg","f4-k-166.jpg","f4-k-167.jpg","f4-k-168.jpg","f4-k-169.jpg","f4-k-170.jpg","f4-k-171.jpg","f4-k-172.jpg","f4-k-173.jpg","f4-k-174.jpg","f4-k-175.jpg","f4-k-176.jpg","f4-k-177.jpg","f4-k-178.jpg","f4-k-179.jpg","f4-k-180.jpg","f4-k-181.jpg","f4-k-182.jpg","f4-k-183.jpg","f4-k-184.jpg","f4-k-185.jpg","f4-k-186.jpg","f4-k-187.jpg","f4-k-188.jpg","f4-k-189.jpg","f4-k-190.jpg","f4-k-191.jpg","f4-k-192.jpg","f4-k-193.jpg","f4-k-194.jpg","f4-k-195.jpg","f4-k-196.jpg","f4-k-197.jpg","f4-k-198.jpg","f4-k-199.jpg","f4-k-200.jpg","f4-k-201.jpg","f4-k-202.jpg","f4-k-203.jpg","f4-k-204.jpg","f4-k-205.jpg","f4-k-206.jpg","f4-k-207.jpg","f4-k-208.jpg","f4-k-209.jpg","f4-k-211.jpg","f4-k-212.jpg","f4-k-213.jpg","f4-k-214.jpg","f4-k-215.jpg","f4-k-216.jpg","f4-k-217.jpg","f4-k-218.jpg","f4-k-219.jpg","f4-k-220.jpg","f4-k-281.jpg","f4-k-282.jpg","f4-k-283.jpg","f4-k-284.jpg","f4-k-285.jpg","f4-k-286.jpg","f4-k-287.jpg","f4-k-288.jpg","f4-k-289.jpg","f4-k-290.jpg","f4-k-291.jpg","f4-k-292.jpg","f4-k-293.jpg","f4-k-294.jpg","f4-k-295.jpg","f4-k-296.jpg","f4-k-297.jpg","f4-k-298.jpg","f4-k-299.jpg","f4-k-300.jpg","f4-k-301.jpg","f4-k-302.jpg","f4-k-303.jpg","f4-k-304.jpg","f4-k-305.jpg","f4-k-306.jpg","f4-k-307.jpg","f4-k-308.jpg","f4-k-309.jpg","f4-k-310.jpg","f4-k-311.jpg","f4-k-312.jpg","f4-k-313.jpg","f4-k-314.jpg","f4-k-315.jpg","f4-k-316.jpg","f4-k-317.jpg","f4-k-318.jpg","f4-k-319.jpg","f4-k-320.jpg","f4-k-321.jpg","f4-k-322.jpg","f4-k-323.jpg","f4-k-324.jpg","f4-k-325.jpg","f4-k-326.jpg","f4-k-327.jpg","f4-k-328.jpg","f4-k-329.jpg","f4-k-330.jpg","f4-k-331.jpg","f4-k-332.jpg","f4-k-333.jpg","f4-k-334.jpg","f4-k-335.jpg","f4-k-336.jpg","f4-k-337.jpg","f4-k-338.jpg","f4-k-339.jpg","f4-k-340.jpg","f4-k-341.jpg","f4-k-342.jpg","f4-k-343.jpg","f4-k-344.jpg","f4-k-345.jpg"];
@@ -72,6 +80,9 @@
     const current = document.getElementById('current');
     const total = document.getElementById('total');
     const stage = document.getElementById('stage');
+    const jumpControls = document.getElementById('jumpControls');
+    const jumpPrev = document.getElementById('jumpPrev');
+    const jumpNext = document.getElementById('jumpNext');
     let index = Math.min(Math.max(Number(location.hash.slice(1)) - 1 || 0, 0), pages.length - 1);
     let touchStartX = 0;
     let animating = false;
@@ -95,14 +106,17 @@
       };
       image.src = pages[index];
       current.textContent = index + 1;
-      prev.disabled = index === 0;
-      next.disabled = index === pages.length - 1;
+      prev.disabled = pages.length < 2;
+      next.disabled = pages.length < 2;
+      jumpControls.hidden = pages.length <= 20;
       if (updateHash) history.replaceState(null, '', `#${index + 1}`);
     }
 
     function turn(target) {
-      if (animating || target < 0 || target >= pages.length || target === index) return;
+      if (animating || pages.length < 2) return;
       const direction = target > index ? 'next' : 'prev';
+      target = ((target % pages.length) + pages.length) % pages.length;
+      if (target === index) return;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(target); return; }
       animating = true;
       image.classList.add(`flip-out-${direction}`);
@@ -119,6 +133,8 @@
 
     prev.addEventListener('click', () => turn(index - 1));
     next.addEventListener('click', () => turn(index + 1));
+    jumpPrev.addEventListener('click', () => turn(index - 10));
+    jumpNext.addEventListener('click', () => turn(index + 10));
     addEventListener('keydown', e => {
       if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); turn(index - 1); }
       if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); turn(index + 1); }
