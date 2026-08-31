@@ -51,6 +51,21 @@
       @keyframes flip-out-prev { to { transform: translateX(7%) rotateY(34deg) scale(.97); opacity: 0; filter: brightness(.55); } }
       @keyframes flip-in-prev { from { transform: translateX(-7%) rotateY(-34deg) scale(.97); opacity: 0; filter: brightness(.55); } to { transform: none; opacity: 1; filter: none; } }
     }
+    /* Keep the image stage identical whether or not ten-page controls are shown. */
+    .catalog { position: relative; }
+    .controls { height: var(--bar-h); }
+    .jump-controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: calc(34px + env(safe-area-inset-bottom)); padding-top: 0; padding-bottom: calc(4px + env(safe-area-inset-bottom)); }
+    .catalog.has-jump-controls .controls { padding-top: 4px; padding-bottom: calc(36px + env(safe-area-inset-bottom)); }
+    .catalog.has-jump-controls .controls > button { min-height: 30px; }
+    @media (max-width: 520px) {
+      .controls { grid-template-columns: 42px minmax(0, 1fr) 42px; }
+      .controls > button { min-height: 36px; }
+      .controls button svg { width: 22px; height: 22px; }
+      .catalog.has-jump-controls .controls { padding-top: 3px; padding-bottom: calc(34px + env(safe-area-inset-bottom)); }
+      .catalog.has-jump-controls .controls > button { min-height: 28px; }
+      .jump-controls { height: calc(32px + env(safe-area-inset-bottom)); padding-bottom: calc(4px + env(safe-area-inset-bottom)); }
+      .jump-controls button { min-width: 92px; min-height: 27px; padding: 3px 7px; font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -80,6 +95,7 @@
     const current = document.getElementById('current');
     const total = document.getElementById('total');
     const stage = document.getElementById('stage');
+    const catalog = document.querySelector('.catalog');
     const jumpControls = document.getElementById('jumpControls');
     const jumpPrev = document.getElementById('jumpPrev');
     const jumpNext = document.getElementById('jumpNext');
@@ -109,6 +125,7 @@
       prev.disabled = pages.length < 2;
       next.disabled = pages.length < 2;
       jumpControls.hidden = pages.length <= 20;
+      catalog.classList.toggle('has-jump-controls', pages.length > 20);
       if (updateHash) history.replaceState(null, '', `#${index + 1}`);
     }
 
