@@ -66,6 +66,44 @@
       .jump-controls { height: calc(32px + env(safe-area-inset-bottom)); padding-bottom: calc(4px + env(safe-area-inset-bottom)); }
       .jump-controls button { min-width: 92px; min-height: 27px; padding: 3px 7px; font-size: 12px; }
     }
+    /* Stable two-row navigation for Safari, iPhone and iPad. */
+    .jump-controls {
+      position: static;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      z-index: auto;
+      display: flex;
+      visibility: visible;
+      width: 100%;
+      height: calc(38px + env(safe-area-inset-bottom));
+      min-height: calc(38px + env(safe-area-inset-bottom));
+      padding: 2px max(14px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+    .jump-controls[hidden] {
+      display: flex;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .catalog.has-jump-controls .controls {
+      padding: 10px max(14px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+    .catalog.has-jump-controls .controls > button { min-height: 46px; }
+    @media (max-width: 520px) {
+      .controls,
+      .catalog.has-jump-controls .controls {
+        padding-top: 7px;
+        padding-bottom: calc(7px + env(safe-area-inset-bottom));
+      }
+      .controls > button,
+      .catalog.has-jump-controls .controls > button { min-height: 34px; }
+      .jump-controls {
+        height: calc(34px + env(safe-area-inset-bottom));
+        min-height: calc(34px + env(safe-area-inset-bottom));
+        padding: 1px max(14px, env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      }
+      .jump-controls button { min-width: 92px; min-height: 28px; }
+    }
   </style>
 </head>
 <body>
