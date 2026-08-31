@@ -104,6 +104,53 @@
       }
       .jump-controls button { min-width: 92px; min-height: 28px; }
     }
+    /* One fixed navigation cell: maximum equal-size stage without button overlap. */
+    :root { --bar-h: calc(78px + env(safe-area-inset-bottom)); }
+    .catalog { grid-template-rows: minmax(0, 1fr) var(--bar-h); }
+    .controls,
+    .jump-controls {
+      grid-column: 1;
+      grid-row: 2;
+      align-self: stretch;
+      width: 100%;
+      height: var(--bar-h);
+      min-height: 0;
+      position: static;
+    }
+    .controls,
+    .catalog.has-jump-controls .controls {
+      padding: 5px max(14px, env(safe-area-inset-right)) calc(39px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+    .controls > button,
+    .catalog.has-jump-controls .controls > button { min-height: 34px; }
+    .jump-controls {
+      display: flex;
+      visibility: visible;
+      padding: 42px max(14px, env(safe-area-inset-right)) calc(5px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+    .jump-controls[hidden] {
+      display: flex;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .jump-controls button { min-height: 30px; }
+    @media (max-width: 520px) {
+      :root { --bar-h: calc(70px + env(safe-area-inset-bottom)); }
+      .controls,
+      .catalog.has-jump-controls .controls {
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+        padding: 4px max(12px, env(safe-area-inset-right)) calc(36px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+      .controls > button,
+      .catalog.has-jump-controls .controls > button { min-height: 30px; }
+      .controls button svg { width: 21px; height: 21px; }
+      .jump-controls {
+        height: var(--bar-h);
+        min-height: 0;
+        padding: 38px max(12px, env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+      .jump-controls button { min-width: 92px; min-height: 28px; padding: 3px 7px; font-size: 12px; }
+    }
   </style>
 </head>
 <body>
